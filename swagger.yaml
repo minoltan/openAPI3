@@ -1,0 +1,932 @@
+swagger: "2.0"
+
+
+######################################################################
+#                          API INFORMATION                           #
+######################################################################
+
+info:
+  description: "This is a IMI Games API documentation. Visit http://imigames.io"
+  version: "1.0.0"
+  title: "IMI GAMES"
+  termsOfService: ""
+  contact:
+    email: "sugeesh@arimaclanka.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.staging.imigames.io"
+basePath: "/api/v1"
+schemes:
+- "https"
+- "http"
+consumes: 
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+
+######################################################################
+#                                PATHS                               #
+######################################################################
+
+paths:
+#1
+  /lgo/catalog:
+    get:
+      tags:
+      - "Catalog"
+      operationId: "catalog"
+      description: "Get all catalogs"
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/catalogs"
+
+#2  
+  /lgo/catalog/{catalog_uuid}:
+    get:
+      tags:
+      - "Catalog"
+      operationId: "catalog_games"
+      description: "Get all games for catalog"
+      parameters:
+        - in: query
+          name: size
+          type: integer
+          description: ""
+        - in: query
+          name: page
+          type: integer
+          description: ""
+        - in: path
+          name: catalog_uuid
+          required: true
+          type: string
+          description: "catalog uuid"
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/catalog_games"
+
+#3
+  /lgo/sliders:
+    get:
+      tags:
+      - "Sliding List"
+      operationId: "sliders"
+      description: "Get Main Slider Images"
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/slides"
+  
+#4
+  /lgo/game/search:
+    get:
+      tags:
+      - "Search Game"
+      operationId: "search_games"
+      description: "Search games with pagination"
+      parameters:
+        - in: query
+          name: search
+          type: string
+          description: ""
+        - in: query
+          name: size
+          type: integer
+          description: ""
+        - in: query
+          name: page
+          type: integer
+          description: ""
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/search_games"
+
+#5
+  /lgo/game/popular:
+    get:
+      tags:
+      - "Search Game Suggestions"
+      operationId: "search_game_suggestions"
+      description: "Get Popular Games"
+      parameters:
+        - in: query
+          name: size
+          type: integer
+          description: ""
+        - in: query
+          name: page
+          type: integer
+          description: ""
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/search_game_suggestions"
+
+#6
+  /user/signup/fb:
+    post:
+      tags:
+      - "Login"
+      operationId: "login_with_fb"
+      description: "Login With FB"
+      parameters:
+        - in: query
+          name: token
+          type: string
+          description: "access_token"
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/login_with_fb"
+
+#7
+  /user/signup/google_sign_in:
+    post:
+      tags:
+      - "Login"
+      operationId: "login_with_google"
+      description: "Login With Google"
+      parameters:
+        - in: query
+          name: token
+          type: string
+          description: "access_token"
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/login_with_google"
+
+#8
+  /lg/notification/list:
+    get:
+      tags:
+      - "Notification"
+      operationId: "notification_list"
+      description: "Get Notification List"
+      security:
+        - Bearer: []
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/notification_list"
+
+#9
+  /lg/game/user-subscribed/games:
+    get:
+      tags:
+      - "Subscription"
+      operationId: "subscription_list"
+      description: "Get Subscription Game List"
+      security:
+        - Bearer: []
+      consumes:
+      - "application/json"
+      responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/subscription_list"
+
+#10
+  /user/user:
+      get:
+        tags:
+        - "User"
+        operationId: "user_details"
+        description: "Get User Details"
+        security:
+          - Bearer: []
+        consumes:
+        - "application/json"
+        responses:
+            "200":
+              description: "successful operation"
+              schema:
+                $ref: "#/definitions/user_details"
+
+#11
+  /lgo/mobile/update:
+      get:
+        tags:
+        - "Force Update"
+        operationId: "force_update"
+        description: "force_update"
+        consumes:
+        - "application/json"
+        responses:
+            "200":
+              description: "successful operation"
+              schema:
+                $ref: "#/definitions/force_update"
+
+#12
+  /lg/push_notification/player_register/{player_id}:
+      post:
+        tags:
+        - "Push Notification"
+        operationId: "add_push_notification_user"
+        description: "Register Onesignal User"
+        security:
+          - Bearer: []
+        parameters:
+        - in: path
+          name: player_id
+          required: true
+          type: string
+          description: "onesignal player id"
+        consumes:
+        - "application/json"
+        responses:
+            "201":
+              description: "successful created"
+              
+#12
+  /lgo/push_notification/remove/{player_id}:
+      delete:
+        tags:
+        - "Push Notification"
+        operationId: "remove_push_notification_user"
+        description: "Remove Onesignal User"
+        security:
+          - Bearer: []
+        parameters:
+        - in: path
+          name: player_id
+          required: true
+          type: string
+          description: "onesignal player id"
+        consumes:
+        - "application/json"
+        responses:
+            "204":
+              description: "successfullt updated"
+    
+    
+######################################################################
+#                            DEFINITIONS                             #
+######################################################################
+  
+  
+definitions:
+#1
+  catalogs :
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            catalog_id: 
+              type: string
+            catalog_name: 
+              type: string
+            catalog_type: 
+              type: string
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+      requestedURI: 
+        type: string
+        format: nullable
+          
+  catalog_games :
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: object
+        properties: 
+          catalog_id: 
+            type: string
+          catalog_name: 
+            type: string
+          catalog_type: 
+            type: string
+          catalog_item_list: 
+            type: array
+            items: 
+              type: object
+              properties: 
+                item_name: 
+                  type: string
+                item_description: 
+                  type: string
+                item_url: 
+                  type: string
+                additional_info: 
+                  type: object
+                  properties: 
+                    game_id: 
+                      type: string
+                    game_name: 
+                      type: string
+                    game_description: 
+                      type: string
+                    cover_image: 
+                      type: string
+                    popularity: 
+                      type: string
+                    trend: 
+                      type: string
+                    url: 
+                      type: string
+                    uuid: 
+                      type: string
+                    portrait: 
+                      type: boolean
+                    premium: 
+                      type: boolean
+  success: 
+    type: boolean
+  errorMessage: 
+    type: string
+    format: nullable
+  requestedURI: 
+    type: string
+    format: nullable
+
+      
+
+
+#1
+  slides :
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            id: 
+              type: integer
+              format: int32
+            img: 
+              type: string
+            type: 
+              type: integer
+              format: int32
+            game_uuid: 
+              type: string
+
+
+#3
+  search_games :
+    type: "object"
+    properties: 
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: object
+        properties: 
+          totalRows: 
+            type: integer
+            format: int32
+          totalPages: 
+            type: integer
+            format: int32
+          currentPage: 
+            type: integer
+            format: int32
+          dataRows: 
+            type: array
+            items: 
+              type: object
+              properties: 
+                id: 
+                  type: integer
+                  format: int32
+                name: 
+                  type: string
+                description: 
+                  type: string
+                url: 
+                  type: string
+                  format: nullable
+                cover_image: 
+                  type: string
+                uuid: 
+                  type: string
+                rating: 
+                  type: integer
+                  format: int32
+                coin_amount: 
+                  type: integer
+                  format: int32
+                category_id: 
+                  type: integer
+                  format: int32
+                category_name: 
+                  type: string
+                developer_id: 
+                  type: integer
+                  format: int32
+                country_id: 
+                  type: integer
+                  format: int32
+                published: 
+                  type: boolean
+                stage: 
+                  type: integer
+                  format: int32
+                sck: 
+                  type: string
+                  format: nullable
+                gameSecret: 
+                  type: string
+                  format: nullable
+                language: 
+                  type: string
+                  format: nullable
+                premium: 
+                  type: boolean
+                platform: 
+                  type: integer
+                  format: int32
+                base_color_1: 
+                  type: string
+                base_color_2: 
+                  type: string
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+      requestedURI: 
+        type: string
+        format: nullable
+
+#4
+  search_game_suggestions:
+     type: "object"
+     properties:
+        language: 
+          type: string
+        statusInfo: 
+          type: string
+        entityType: 
+          type: string
+        lastModified: 
+          type: string
+        data: 
+          type: object
+          properties: 
+            totalRows: 
+              type: integer
+              format: int32
+            totalPages: 
+              type: integer
+              format: int32
+            currentPage: 
+              type: integer
+              format: int32
+            dataRows: 
+              type: array
+              items: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    format: int32
+                  name: 
+                    type: string
+                  description: 
+                    type: string
+                  url: 
+                    type: string
+                    format: nullable
+                  cover_image: 
+                    type: string
+                  uuid: 
+                    type: string
+                  rating: 
+                    type: number
+                  coin_amount: 
+                    type: integer
+                    format: int32
+                  category_id: 
+                    type: integer
+                    format: int32
+                  category_name: 
+                    type: string
+                  developer_id: 
+                    type: integer
+                    format: int32
+                  country_id: 
+                    type: integer
+                    format: int32
+                  published: 
+                    type: boolean
+                  stage: 
+                    type: integer
+                    format: int32
+                  sck: 
+                    type: string
+                    format: nullable
+                  gameSecret: 
+                    type: string
+                    format: nullable
+                  language: 
+                    type: string
+                    format: nullable
+                  premium: 
+                    type: boolean
+                  platform: 
+                    type: integer
+                    format: int32
+                  base_color_1: 
+                    type: string
+                  base_color_2: 
+                    type: string
+        success: 
+          type: boolean
+        errorMessage: 
+          type: string
+          format: nullable
+        requestedURI: 
+          type: string
+          format: nullable
+
+                    
+#5
+  login_with_fb:
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: object
+        properties: 
+          access_token: 
+            type: string
+          refresh_token: 
+            type: string
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+
+#6
+  login_with_google:
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: object
+        properties: 
+          access_token: 
+            type: string
+          refresh_token: 
+            type: string
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+        
+#7
+  notification_list:
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            type: 
+              type: string
+            friendUUID: 
+              type: string
+              format: nullable
+            friend_name: 
+              type: string
+              format: nullable
+            friend_image: 
+              type: string
+              format: nullable
+            friend_request_uuid: 
+              type: string
+              format: nullable
+            challenge_score: 
+              type: integer
+              format: int32
+            challenge_uuid: 
+              type: string
+              format: nullable
+            game_image: 
+              type: string
+              format: nullable
+            game_name: 
+              type: string
+              format: nullable
+            game_uuid: 
+              type: string
+              format: nullable
+            message: 
+              type: string
+            time: 
+              type: string
+            read: 
+              type: boolean
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+      requestedURI: 
+        type: string
+        format: nullable
+        
+#8
+  subscription_list:
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            id: 
+              type: integer
+              format: int32
+            name: 
+              type: string
+            description: 
+              type: string
+            url: 
+              type: string
+            cover_image: 
+              type: string
+            uuid: 
+              type: string
+            rating: 
+              type: integer
+              format: int32
+            coin_amount: 
+              type: integer
+              format: int32
+            category_id: 
+              type: integer
+              format: int32
+            category_name: 
+              type: string
+              format: nullable
+            developer_id: 
+              type: integer
+              format: int32
+            country_id: 
+              type: integer
+              format: int32
+            published: 
+              type: boolean
+            stage: 
+              type: integer
+              format: int32
+            sck: 
+              type: string
+              format: nullable
+            gameSecret: 
+              type: string
+              format: nullable
+            language: 
+              type: string
+              format: nullable
+            premium: 
+              type: boolean
+            platform: 
+              type: integer
+              format: int32
+            base_color_1: 
+              type: string
+              format: nullable
+            base_color_2: 
+              type: string
+              format: nullable
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+      requestedURI: 
+        type: string
+        format: nullable
+
+#9
+  user_details:
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: object
+        properties: 
+          id: 
+            type: integer
+            format: int32
+          name: 
+            type: string
+          email: 
+            type: string
+          password: 
+            type: string
+            format: nullable
+          old_password: 
+            type: string
+            format: nullable
+          image_url: 
+            type: string
+          role: 
+            type: string
+          type: 
+            type: string
+          social_login_id: 
+            type: string
+            format: nullable
+          uuid: 
+            type: string
+          active: 
+            type: boolean
+          lastLogin: 
+            type: string
+            format: nullable
+          imi_coin_balance: 
+            type: string
+            format: nullable
+          is_onbording_complete: 
+            type: boolean
+          gamer_id: 
+            type: string
+          language: 
+            type: string
+          subscription_image: 
+            type: string
+            format: nullable
+          xpLevel: 
+            type: object
+            properties: 
+              xpPoints: 
+                type: integer
+                format: int32
+              xpLevel: 
+                type: integer
+                format: int32
+          mobile_number: 
+            type: string
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+      requestedURI: 
+        type: string
+        format: nullable
+
+#10
+  force_update:
+    type: "object"
+    properties:
+      language: 
+        type: string
+      statusInfo: 
+        type: string
+      entityType: 
+        type: string
+      lastModified: 
+        type: string
+      data: 
+        type: object
+        properties: 
+          ios_version: 
+            type: string
+          android_version: 
+            type: string
+          flutter_ios_version: 
+            type: string
+          flutter_ios_force_update: 
+            type: boolean
+          flutter_android_version: 
+            type: string
+          flutter_android_force_update: 
+            type: boolean
+          message: 
+            type: string
+          force: 
+            type: boolean
+      success: 
+        type: boolean
+      errorMessage: 
+        type: string
+        format: nullable
+      requestedURI: 
+        type: string
+        format: nullable
+
+
+######################################################################
+#                               EXTRA                                #
+######################################################################
+
+externalDocs:
+  description: "Find out more about IMI GAMES"
+  url: "https://imigames.io"
